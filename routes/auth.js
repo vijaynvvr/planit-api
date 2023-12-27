@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
             }
             const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '2h'});
             const options = {
-                expires: new Date(Date.now() + 2*60*1000),
+                expires: new Date(Date.now() + 2*60*60*1000),
                 secure: process.env.NODE_ENV === "development" ? false : true,
                 httpOnly: process.env.NODE_ENV === "development" ? false : true,
                 sameSite: process.env.NODE_ENV === "development" ? false : "none",
