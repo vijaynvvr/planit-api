@@ -1,2 +1,1 @@
-A day planner app with additional social features
-
+## A day planner app with additional social features
