@@ -98,7 +98,7 @@ router.put('/updateTodo/:id', async (req, res) => {
 });
 
 
-router.delete('/deleteTodo/:id', async (req, res) => {
+router.delete('/deleteTodo/:id', auth, async (req, res) => {
     try {
         const {id} = req.params;
 
