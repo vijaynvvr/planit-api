@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     },
     visibility: {
         type: Boolean,
-        default: false
+        default: true
     }
 });
 
