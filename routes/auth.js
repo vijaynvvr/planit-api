@@ -49,7 +49,8 @@ router.post("/login", async (req, res) => {
             const payload = {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                visibility: user.visibility
             }
             const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '2h'});
             const options = {
@@ -63,7 +64,8 @@ router.post("/login", async (req, res) => {
                 user: {
                     id: user._id,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    visibility: user.visibility
                 },
                 message: 'User logged in successfully'
             });
@@ -94,7 +96,10 @@ router.get("/logout",async (req,res)=>{
     }
 });
 
-router.get("/fetchUser", auth, (req, res) => {
+router.get("/fetchUser", auth, async (req, res) => {
+    let user = await User.findById(req.user.id);
+    req.user.visibility = user.visibility;
+    
     res.status(200).json({
         success: true,
         message: 'User logged in',
