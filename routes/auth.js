@@ -124,7 +124,7 @@ router.get("/fetchUser/:id", async (req, res) => {
 
 router.get("/getUsers", async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find({visibility: true});
         res.status(200).json({
             success: true,
             data: users,
@@ -144,7 +144,7 @@ router.get("/getUsers", async (req, res) => {
 router.get("/getUsers/:id", async (req, res) => {
     try {
         const query = req.params.id;
-        const users = await User.find({ name: { $regex: `^${query}`, $options: 'i' } });
+        const users = await User.find({ name: { $regex: `^${query}`, $options: 'i' }, visibility: true });
         res.status(200).json({
             success: true,
             data: users,
@@ -160,5 +160,37 @@ router.get("/getUsers/:id", async (req, res) => {
         })
     }
 });
+
+router.put("/updateVisibility/:email", auth, async (req, res) => {
+	try {
+		const { email } = req.params;
+        const {status} = req.body;
+		const user = await User.findOne({email: email});
+		if (!user) {
+			return res.status(404).json({
+				success: false,
+				message: "User not found",
+			});
+		}
+
+		user.visibility = status;
+		await user.save();
+
+		res.status(200).json({
+			success: true,
+			data: user,
+			message: "User visibility changed successfully",
+		});
+
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({
+			success: false,
+			error: "Internal Server Error",
+			message: error.message,
+		});
+	}
+});
+
 
 module.exports = router;
